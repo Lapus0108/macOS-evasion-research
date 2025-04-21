@@ -1,0 +1,19 @@
+{
+    "paths": {
+        "csrutil": "/usr/bin/csrutil",
+        "date": "/bin/date",
+        "diskutil": "/usr/sbin/diskutil",
+        "df": "/bin/df",
+        "ifconfig": "/sbin/ifconfig",
+        "ioreg": "/usr/sbin/ioreg",
+        "last": "/usr/bin/last",
+        "networksetup": "/usr/sbin/networksetup",
+        "powermetrics": "/usr/bin/powermetrics",
+        "sysctl": "/usr/sbin/sysctl",
+        "system_profiler": "/usr/sbin/system_profiler",
+        "sw_vers": "/usr/bin/sw_vers",
+        "uname": "/usr/bin/uname",
+        "uptime": "/usr/bin/uptime",
+        "who": "/usr/bin/who"
+    }
+}
