@@ -1,11 +1,10 @@
 import argparse
-from ResultsDisplayer import ResultsDisplayer
 
 from modules.SystemScanner import SystemScanner
 from modules.ArtifactsScanner import ArtifactsScanner
 from modules.PeripheralsScanner import PeripheralsScanner
 from modules.UserActivityScanner import UserActivityScanner
-
+from modules.ResultsDisplayer import ResultsDisplayer
 
 class HeimdallScanner:
     def __init__(self):

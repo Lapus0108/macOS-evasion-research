@@ -1,0 +1,4 @@
+psutil
+pyobjc
+termcolor
+pyinstaller

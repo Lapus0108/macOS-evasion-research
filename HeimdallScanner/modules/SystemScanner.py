@@ -184,6 +184,7 @@ class SystemScanner:
         result = self.sp_hardware_info
         if not command_had_errors(result):
             model_number_line = get_output_line(result['output'], "Model Number")
+            model_number = None
             if len(model_number_line) > 0:
                 model_number = model_number_line.split(": ")[1]
 
