@@ -1,0 +1,135 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/configuration_macbook_pro.txt"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: Configuration file ($CONFIG_FILE) not found!"
+    exit 1
+fi
+
+while IFS='=' read -r key value; do
+    [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
+
+    value="${value//\"/}"
+    eval "$key=\"$value\""
+done < "$CONFIG_FILE"
+
+# Do not perform modifications for -json and -xml options
+for arg in "$@"; do
+    if [[ "$arg" == "-json" || "$arg" == "-xml" ]]; then
+        /usr/sbin/system_profiler "$@"
+        exit 0
+    fi
+done
+
+# Check if the value should be modified based on the provided argument (using -n option)
+if [[ $# -eq 1 ]]; then
+    key="$1"
+
+    if [[ "$key" = "SPCameraDataType" ]]; then
+        echo """
+Camera:
+
+    FaceTime HD Camera:
+
+      Model ID: FaceTime HD Camera
+      Unique ID: F9C1B237-1E44-45B5-9032-7DFA6AC67B1E
+"""    
+        exit 0
+    elif [[ "$key" = "SPDisplaysDataType" ]]; then
+        echo """
+Graphics/Displays:
+
+    Apple M1:
+
+      Chipset Model: Apple M1
+      Type: GPU
+      Bus: Built-In
+      Total Number of Cores: 8
+      Vendor: Apple (0x106b)
+      Metal Support: Metal 3
+      Displays:
+        Color LCD:
+          Display Type: Built-In Retina LCD
+          Resolution: 2560 x 1600 Retina
+          Main Display: Yes
+          Mirror: Off
+          Online: Yes
+          Automatically Adjust Brightness: Yes
+          Connection Type: Internal
+"""
+        exit 0
+    elif [[ "$key" = "SPAudioDataType" ]]; then
+        echo """
+Audio:
+
+    Devices:
+
+        MacBook Pro Microphone:
+
+          Default Input Device: Yes
+          Input Channels: 1
+          Manufacturer: Apple Inc.
+          Current SampleRate: 48000
+          Transport: Built-in
+          Input Source: MacBook Pro Microphone
+
+        MacBook Pro Speakers:
+
+          Default Output Device: Yes
+          Default System Output Device: Yes
+          Manufacturer: Apple Inc.
+          Output Channels: 2
+          Current SampleRate: 48000
+          Transport: Built-in
+          Output Source: MacBook Pro Speakers
+"""
+        exit 0
+    elif [[ "$key" = "SPUSBDataType" ]]; then
+        echo """
+USB:
+
+    USB 3.1 Bus:
+
+      Host Controller Driver: AppleT8103USBXHCI
+
+    USB 3.1 Bus:
+
+      Host Controller Driver: AppleT8103USBXHCI
+"""
+        exit 0
+    fi
+fi
+
+/usr/sbin/system_profiler "$@" | awk \
+    -v model_name="${SYSTEM_PROFILER_MODEL_NAME}" \
+    -v identifier="${SYSTEM_PROFILER_MODEL_IDENTIFIER}" \
+    -v model_number="${SYSTEM_PROFILER_MODEL_NUMBER}" \
+    -v serial="${SYSTEM_PROFILER_SERIAL_NUMBER}" \
+    -v firmware="${SYSTEM_PROFILER_FIRMWARE_VERSION}" \
+    -v loader="${SYSTEM_PROFILER_OS_LOADER_VERSION}" \
+    -v chip="${SYSTEM_PROFILER_CHIP}" \
+    -v capacity="${SYSTEM_PROFILER_CAPACITY}" \
+    -v sip="${SYSTEM_PROFILER_SIP_STATUS}" \
+    -v cores="${SYSTEM_PROFILER_CORES}" \
+    -v mac_addr="${SYSTEM_PROFILER_MAC_ADDRESS}" \
+    -v device_name="${SYSTEM_PROFILER_STORAGE_DEVICE_NAME}" \
+    -v manufacturer="${SYSTEM_PROFILER_MANUFACTURER}" '
+{
+    gsub(/Model Name:.*/, "Model Name: " model_name);
+    gsub(/Model Identifier:.*VMware.*/, "Model Identifier: " identifier);
+    gsub(/Model Number:.*VM.*/, "Model Number: " model_number);
+    gsub(/Total Number of Cores:.*/, "Total Number of Cores: " cores);
+    gsub(/System Firmware Version: VM.*/, "System Firmware Version: " firmware);
+    gsub(/OS Loader Version:.*/, "OS Loader Version: " loader);
+    gsub(/Serial Number \\(system\\): VM.*/, "Serial Number (system): " serial);
+    gsub(/System Integrity Protection:.*/, "System Integrity Protection: " sip);
+    gsub(/Chip:.*Virtual/, "Chip: " chip);
+    gsub(/Capacity:.*/, "Capacity: " capacity);
+    gsub(/MAC Address:.*/, "MAC Address: " mac_addr);
+    gsub(/Device Name: VMware.*/, "Device Name: " device_name);
+    gsub(/Manufacturer: VMware.*/, "Manufacturer: " manufacturer);
+
+    print;
+}
+'

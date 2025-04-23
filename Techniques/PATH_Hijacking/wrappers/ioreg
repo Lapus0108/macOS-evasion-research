@@ -1,0 +1,38 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/configuration_macbook_pro.txt"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: Configuration file ($CONFIG_FILE) not found!"
+    exit 1
+fi
+
+while IFS='=' read -r key value; do
+    [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue    
+    value="${value//\"/}"
+    eval "$key=\"$value\""
+    
+done < "$CONFIG_FILE"
+
+/usr/sbin/ioreg "$@" | awk -v model_name="$IOREG_MODEL" -v product_name="$IOREG_PRODUCT_NAME" \
+    -v serial="$IOREG_SERIAL_NUMBER" -v mac_address="$IOREG_MAC_ADDRESS" \
+    -v iohid_product="$IOREG_IOHID_PRODUCT_NAME" -v manufacturer="$IOREG_MANUFACTURER" \
+    -v vendid="$IOREG_MANUFACTURER_VENDOR_ID" -v usbvid="$IOREG_USB_VENDOR_ID" \
+    -v usbvname="$IOREG_USB_VENDOR_NAME" '
+{
+    gsub(/"model" = .*/, "\"model\" = <\"" model_name "\">");
+    gsub(/product-name" = .*/, "product-name\" = <\"" product_name "\">");
+    gsub(/IOPlatformSerialNumber" = .*/, "IOPlatformSerialNumber\" = \"" serial "\"");
+    gsub(/IOMACAddress" = .*/, "IOMACAddress\" = <" mac_address ">");
+    gsub(/Product" = ".*(Keyboard|Mouse).*/, "Product\" = \"" iohid_product "\"");
+    gsub(/Manufacturer" = "VMware.*/, "Manufacturer\" = \"" manufacturer "\"");
+    gsub(/manufacturer" = <\"VMware.*\">/, "manufacturer\" = <\"" manufacturer "\">");
+    
+    gsub(/VendorID" = 3599/, "VendorID\" = " vendid);
+    gsub(/idVendor" = 3599/, "idVendor\" = " usbvid);
+    gsub(/USB Vendor Name" = "VMware.*/, "USB Vendor Name\" = \"" usbvname "\"");
+    gsub(/kUSBVendorString" = "VMware.*/, "kUSBVendorString\" = \"" usbvname "\"");
+
+    gsub(/VMware/, "");
+    print
+}'

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/configuration_macbook_pro.txt"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: Configuration file ($CONFIG_FILE) not found!"
+    exit 1
+fi
+
+while IFS='=' read -r key value; do
+    [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue    
+    value="${value//\"/}"
+    eval "$key=\"$value\""
+    
+done < "$CONFIG_FILE"
+
+# Call df -h and modify the output
+/bin/df -h "$@" | awk -v totalsize="$DF_DISK_SIZE" -v usedsize="$DF_USED_SIZE" -v avsize="$DF_AVAILABLE_SIZE" '
+NR==1 { print; next }
+$1 ~ /^\/dev\// { 
+    printf "%-16s %-8s %-6s %-8s %-6s %-5s %-7s %-4s %-10s\n", $1, totalsize, usedsize, avsize, $5, $6, $7, $8, $9
+    next 
+}
+{ print }
+'

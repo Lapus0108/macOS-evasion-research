@@ -1,0 +1,60 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/configuration_macbook_pro.txt"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: Configuration file ($CONFIG_FILE) not found!"
+    exit 1
+fi
+
+while IFS='=' read -r key value; do
+    [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue    
+    value="${value//\"/}"
+    eval "$key=\"$value\""
+    
+done < "$CONFIG_FILE"
+
+args_modifications=(
+    "hw.model|$SYSCTL_HW_MODEL"
+    "hw.memsize|$SYSCTL_HW_MEMSIZE"
+    "kern.hv_vmm_present|$SYSCTL_KERN_HV_VMM_PRESENT"
+    "machdep.cpu.brand_string|$SYSCTL_MACHDEP_BRAND_STRING"
+)
+
+values_modifications=(
+    "hw.memsize.*|hw.memsize: $SYSCTL_HW_MEMSIZE"
+    "kern.hv_vmm_present.*|kern.hv_vmm_present: $SYSCTL_KERN_HV_VMM_PRESENT"
+)
+
+# Check if the value should be modified based on the provided argument (using -n option)
+if [[ $# -eq 2 && "$1" == "-n" ]]; then
+    key="$2"
+
+    for mod in "${args_modifications[@]}"; do
+        mod_key="${mod%%|*}"
+        mod_value="${mod##*|}"
+
+        if [[ "$key" == "$mod_key" ]]; then
+            echo "$mod_value"
+            exit 0
+        fi
+    done
+fi
+
+# Check if the value should be modified based on result (using -a option, then grep)
+/usr/sbin/sysctl "$@" | while IFS= read -r line; do
+    modified_line="$line"
+
+    for modification in "${values_modifications[@]}"; do
+        pattern="${modification%%|*}"
+        replacement="${modification##*|}"
+
+        if [[ "$modified_line" =~ $pattern ]]; then
+            modified_line="$replacement"
+            break
+        fi
+    done
+
+    echo -e "$modified_line"
+done
+

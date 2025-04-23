@@ -1,0 +1,35 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/configuration_macbook_pro.txt"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: Configuration file ($CONFIG_FILE) not found!"
+    exit 1
+fi
+
+while IFS='=' read -r key value; do
+    [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue    
+    value="${value//\"/}"
+    eval "$key=\"$value\""
+    
+done < "$CONFIG_FILE"
+
+modifications=(
+    "Machine model:.*VMware|Machine model: $POWERMETRICS_MACHINE_MODEL"
+)
+
+/usr/bin/powermetrics "$@"  | while IFS= read -r line; do
+    modified_line="$line"
+    
+    for modification in "${modifications[@]}"; do
+        pattern="${modification%%|*}"
+        replacement="${modification##*|}"
+
+        if [[ "$modified_line" =~ $pattern ]]; then
+            modified_line="$replacement"
+            break
+        fi
+    done
+
+    echo -e "$modified_line"
+done

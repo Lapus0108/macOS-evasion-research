@@ -1,0 +1,35 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/configuration_macbook_pro.txt"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: Configuration file ($CONFIG_FILE) not found!"
+    exit 1
+fi
+
+while IFS='=' read -r key value; do
+    [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue    
+    value="${value//\"/}"
+    eval "$key=\"$value\""
+    
+done < "$CONFIG_FILE"
+
+/usr/sbin/diskutil "$@" | awk \
+    -v disk_size="$DISKUTIL_DISK_SIZE" \
+    -v list_size="$DISKUTIL_LIST_SIZE" '
+{
+    gsub(/^ *Disk Size:.*/, "   Disk Size:                 " disk_size);
+    gsub(/^ *Container Total Space:.*/, "   Container Total Space:     " disk_size);
+
+    # Apple_APFS Container line
+    if ($0 ~ /Apple_APFS Container/) {
+        if (match($0, /[0-9]+(\.[0-9]+)? (GB|MB|TB)/)) {
+            prefix = substr($0, 1, RSTART - 1);
+            suffix = substr($0, RSTART + RLENGTH + 1);
+            $0 = prefix list_size suffix;
+        }
+    }
+
+    print;
+}
+'

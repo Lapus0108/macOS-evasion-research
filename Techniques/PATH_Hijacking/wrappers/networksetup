@@ -1,0 +1,30 @@
+#!/bin/bash
+
+TARGET_PREFIXES=(
+    "00:1C:42"
+    "08:00:27"
+    "00:06:09"
+    "00:0C:29"
+    "00:1C:14"
+    "00:50:56"
+    "00:05:59"
+    "00:16:E3"
+)
+
+NEW_PREFIX="06:5d:0d"
+
+/usr/sbin/networksetup "$@" | while IFS= read -r line; do
+  modified_line="$line"
+  
+  for prefix in "${TARGET_PREFIXES[@]}"; do
+
+    if [[ $line =~ ($prefix:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}) ]]; then 
+        original_mac="${BASH_REMATCH[1]}"
+        suffix="${original_mac:9}"
+        new_mac_address="$NEW_PREFIX:$suffix"
+        modified_line="${modified_line//$original_mac/$new_mac_address}"
+    fi
+  done
+
+  echo "$modified_line"
+done
