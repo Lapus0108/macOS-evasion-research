@@ -165,6 +165,12 @@ class PeripheralsScanner:
         
         if not command_had_errors(result):
             command_output = json.loads(result['output'])
+            if len(command_output['SPDisplaysDataType']) == 0:
+                self.displays['displays_number']
+                self.displays['built_in_display'] = False
+                self.increase_score('displays', 'displays_number')
+                return False
+
             displays_info = command_output['SPDisplaysDataType'][0]
             if "spdisplays_ndrvs" in displays_info:
                 displays = displays_info["spdisplays_ndrvs"]

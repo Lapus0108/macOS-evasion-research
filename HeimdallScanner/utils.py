@@ -1,7 +1,17 @@
 import re
 import json
+import os
+import sys
 import datetime
 import subprocess
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 def get_command_output(command: list):
@@ -49,7 +59,8 @@ def calculate_date_diff_minutes(past_date):
     return int(difference.total_seconds() // 60)
 
 def load_utilities_paths():
-    with open("modules/paths.json", "r") as paths_list:
+    path_to_json = resource_path(os.path.join("modules", "paths.json"))
+    with open(path_to_json, "r") as paths_list:
         json_content = json.load(paths_list)
         return json_content['paths']
     

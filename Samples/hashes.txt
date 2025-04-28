@@ -7,6 +7,19 @@
     - e415186a6a2209817e01f4ec932f3c9a
     - 189fcf65b0f63d60573bbfbdc8c5987a
 
+- Banshee Stealer
+	- f4c259fbe8ce7f5aa048246e5ad6b775
+	- e9bc454099aab9c587e55792d17bec34
+	- ee9d6c9f5fd381a70f2b66dc27b5ea4d 
+
+- JaskaGo
+	- b53fe5f94c2317a79b1150bbed05c478
+	- a117f67c03f1c1dc9e4c6cb42a6d3382
+
+- MacRansom
+	- 8fe94843a3e655209c57af587849ac3a
+	- 9c282d821db3aff383bfd7d296280b7a
+	
 - Pirrit Adware, variant 1
     - c43ded41e91d5b2916b7ff12e1a55815
     - 079babfded8dfdce8449310dedc9f1ee
