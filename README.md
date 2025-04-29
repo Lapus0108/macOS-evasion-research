@@ -18,3 +18,7 @@ During our research, this set of samples was used to evaluate the effectiveness 
 ### 🛡 Techniques/
 
 Provides several scripts that implement the anti-fingerprinting techniques presented in the paper associated with this repository. The proposed solutions are independent of any specific sandbox implementation and can strengthen analysis environments by tackling evasion attempts performed by macOS malware.
+
+---
+
+### 🚀 Feel free to explore the content of this repository and reach out with any questions

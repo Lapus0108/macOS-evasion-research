@@ -33,3 +33,10 @@ An alternative is to generate a standalone Mach-O binary using PyInstaller, allo
 pyinstaller --onefile --add-data "modules/paths.json:modules" HeimdallScanner.py
 ```
 
+## 🔹 Usage
+**HeimdallScanner** supports 2 command-line options:
+```bash
+-v, --verbose     Display additional details about the checks that detected a virtual machine
+-f, --full-paths  Run system utilities using their full path instead of only the name (ex:
+'/usr/sbin/system_profiler' instead of 'system_profiler')
+```
