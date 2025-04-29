@@ -33,6 +33,8 @@ An alternative is to generate a standalone Mach-O binary using PyInstaller, allo
 pyinstaller --onefile --add-data "modules/paths.json:modules" HeimdallScanner.py
 ```
 
+For full functionality, the tool should be run with administrator privileges.
+
 ## 🔹 Usage
 **HeimdallScanner** supports 2 command-line options:
 ```bash
