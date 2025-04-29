@@ -1,11 +1,10 @@
-
 - Labyrenth Ransomware
-    - 55bcaab009be24ef6645a701c1189892
+	- 55bcaab009be24ef6645a701c1189892
 
 - Realst Stealer
-    - b6f07a5e7df159b6d01c0f36b6d92793
-    - e415186a6a2209817e01f4ec932f3c9a
-    - 189fcf65b0f63d60573bbfbdc8c5987a
+	- b6f07a5e7df159b6d01c0f36b6d92793
+	- e415186a6a2209817e01f4ec932f3c9a
+	- 189fcf65b0f63d60573bbfbdc8c5987a
 
 - Banshee Stealer
 	- f4c259fbe8ce7f5aa048246e5ad6b775
@@ -21,9 +20,9 @@
 	- 9c282d821db3aff383bfd7d296280b7a
 	
 - Pirrit Adware, variant 1
-    - c43ded41e91d5b2916b7ff12e1a55815
-    - 079babfded8dfdce8449310dedc9f1ee
-    - f6cb73804e5020da53d74610b1287778
+	- c43ded41e91d5b2916b7ff12e1a55815
+	- 079babfded8dfdce8449310dedc9f1ee
+	- f6cb73804e5020da53d74610b1287778
 
 - Pirrit Adware, variant 2
     - 2af6284482ee333260ea42c3778844e7
