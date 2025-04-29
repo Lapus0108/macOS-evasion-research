@@ -1,5 +1,5 @@
 ## 🔹 Usage
-In order to hook certain system calls, such as `sysctl` (used to retrieve system properties), `sleep` (to combat time-based delays employes by malicious program) or `csr_get_active_config` (to conceal that SIP is disabled), follow these steps:
+In order to hook certain system calls, such as `sysctl` (used to retrieve system properties), `sleep` (to combat time-based delays employed by malicious programs) or `csr_get_active_config` (to conceal that SIP is disabled), follow these steps:
 
 1. Compile each C program as a dynamic library using the following command format:
 ```bash
