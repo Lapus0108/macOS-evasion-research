@@ -53,19 +53,19 @@ class UserActivityScanner:
             },
             {
                 'label': 'Number of items on Desktop',
-                'result': f'The user has {desktop_entries} items on Desktop.',
+                'result': f'The user has only {desktop_entries} {'item' if desktop_entries == 1 else 'items'} on Desktop.',
                 'vm_detected': desktop_entries < self.DESKTOP_ITEMS_THRESHOLD,
                 'status': 'success' 
             },
             {
                 'label': 'Downloads',
-                'result': f'The user has {downloads_entries} items in the Downloads folder.',
+                'result': f"The user has only {downloads_entries} {'item' if downloads_entries == 1 else 'items'} in the Downloads folder.",
                 'vm_detected': downloads_entries < self.DOWNLOADS_ITEMS_THRESHOLD,
                 'status': 'success' 
             },
             {
                 'label': 'Common Applications',
-                'result': f'The user has {common_apps_installed} applications installed from a list of commonly found apps.',
+                'result': f"The user has {common_apps_installed} {'application' if common_apps_installed == 1 else 'applications'} installed from a list of commonly found apps.",
                 'vm_detected': common_apps_installed < self.COMMON_APPS_THRESHOLD,
                 'status': 'success' 
             }
