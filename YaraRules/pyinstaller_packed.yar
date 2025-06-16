@@ -1,5 +1,3 @@
-import "macho"
-
 rule PyInstallerPacked {
     meta:
         description = "The sample is packed using PyInstaller"

@@ -19,6 +19,10 @@ During our research, this set of samples was used to evaluate the effectiveness 
 
 Provides several scripts that implement the anti-fingerprinting techniques presented in the paper associated with this repository. The proposed solutions are independent of any specific sandbox implementation and can strengthen analysis environments by tackling evasion attempts performed by macOS malware.
 
+### 📂 YaraRules/
+
+Stores a collection of YARA-X rules specifically crafted to detect stripped, packed, or obfuscated Mach-O binaries. These rules are designed to assist in identifying suspicious binaries that attempt to evade signature-based detection rules.
+
 ---
 
 ### 🚀 Feel free to explore the content of this repository and reach out with any questions
