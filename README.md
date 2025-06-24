@@ -1,4 +1,4 @@
-# macOS Malware Evasion: A Study on Anti-Fingerprinting Techniques and Sandbox Hardening Approaches
+# macOS Malware Evasion: A Study on Anti-Fingerprinting, Sandbox Hardening and Deobfuscation Techniques
 
 Welcome to the repository containing the tools developed during our research on evasion techniques employed by macOS malware. Our study focused both on methods used to detect virtualized or sandboxed environments, as well as anti-fingerprinting and hardening techniques designed to conceal virtualization and enable evasive malware to run.
 
