@@ -1,0 +1,28 @@
+
+common_packages = [
+    "archive",
+    "compress",
+    "context",
+    "crypto",
+    "encoding",
+    "fmt",
+    "inet", 
+    "internal",
+    "io",
+    "log",
+    "math",
+    "net", 
+    "os",
+    "path",
+    "reflect",
+    "regexp",
+    "runtime",
+    "strconv",
+    "strings",
+    "sync",
+    "syscall",
+    "time",
+    "type", 
+    "unicode",
+    "vendor"
+]
