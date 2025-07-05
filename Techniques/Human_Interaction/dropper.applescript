@@ -40,7 +40,7 @@ tell application "System Events"
 
                 if imageName is "Applications" or imageDesc is "Applications" then
                     set dragDestinationPosition to imagePosition
-                    log "[+] Found image which might correspond to the Applications folder (Pos: " & imagePosition & " | Size: " & imageSize & ")" 
+                    log "[+] Found image which might correspond to the Terminal / Applications folder (Pos: " & imagePosition & " | Size: " & imageSize & ")" 
                 else
                     set dragSourcePositions to dragSourcePositions & {imagePosition}
                     log "[+] Found source image (Pos: " & imagePosition & " | Size: " & imageSize & ")"
@@ -48,11 +48,14 @@ tell application "System Events"
             end if
         end repeat
 
-        repeat with sourceImg in dragSourcePositions
-            log "[+] Starting to drag and drop from " & sourceImg & " to " & dragDestinationPosition
-            do shell script "cliclick dd:" & sourceImg & " dm:" & dragDestinationPosition & " du:" & dragDestinationPosition
-            delay 1
-        end repeat
-
+        if dragDestinationPosition is "" then
+            log "No destination element found"
+        else
+            repeat with sourceImg in dragSourcePositions
+                log "[+] Starting to drag and drop from " & sourceImg & " to " & dragDestinationPosition
+                do shell script "cliclick dd:" & sourceImg & " dm:" & dragDestinationPosition & " du:" & dragDestinationPosition
+                delay 1
+            end repeat
+        end if
     end repeat
 end tell
