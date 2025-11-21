@@ -53,7 +53,7 @@ class UserActivityScanner:
             },
             {
                 'label': 'Number of items on Desktop',
-                'result': f'The user has only {desktop_entries} {'item' if desktop_entries == 1 else 'items'} on Desktop.',
+                'result': f"The user has only {desktop_entries} {'item' if desktop_entries == 1 else 'items'} on Desktop.",
                 'vm_detected': desktop_entries < self.DESKTOP_ITEMS_THRESHOLD,
                 'status': 'success' 
             },

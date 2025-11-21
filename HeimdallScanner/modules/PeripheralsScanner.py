@@ -148,7 +148,7 @@ class PeripheralsScanner:
             if "spairport_airport_interfaces" in networks_info and len(networks_info["spairport_airport_interfaces"]) > 0:
                 networks_info = networks_info["spairport_airport_interfaces"][0]
                 current_network =  networks_info["spairport_current_network_information"]["_name"] if 'spairport_current_network_information' in networks_info else None
-                nearby_networks = len(networks_info["spairport_airport_other_local_wireless_networks"])
+                nearby_networks = len(networks_info["spairport_airport_other_local_wireless_networks"]) if 'spairport_airport_other_local_wireless_networks' in networks_info else None
                 
                 self.network['wifi_connected_network'] = current_network
                 self.network['wifi_nearby_networks'] = nearby_networks
