@@ -279,7 +279,7 @@ class UserActivityScanner:
             conn.close()
 
             return len(rows)
-        except sqlite3.OperationalError:
+        except (sqlite3.OperationalError, sqlite3.DatabaseError):
             print("[Safari] No permissions to open History file. Please run the file directly from the Terminal.")
             return 0
     

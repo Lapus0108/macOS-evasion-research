@@ -45,6 +45,7 @@ class SystemScanner:
         self.check_virtualization_framework()
         self.check_sip_status_csrutil()
         self.check_sip_status_sp()
+        self.check_sip_status_nvram()
 
         # Time
         self.check_uptime()
@@ -305,6 +306,37 @@ class SystemScanner:
                 'command': self.sp_software_cmd,
                 'error_message': result['error'],
                 'status': 'error'
+            })
+
+    def check_sip_status_nvram(self):
+        label = 'SIP status (nvram)'
+        binary_path = self.utilities_paths['nvram'] if self.full_paths else 'nvram'
+        command = [binary_path, "csr-active-config"]
+        command_str = ' '.join(command)
+
+        result = get_command_output(command)
+
+        # If SIP is enabled, the variable is not found  -> Error (error code 1)
+        if command_had_errors(result):
+            status = result['output'].strip()
+            status_parts = status.split('\t')
+            bitmask = status_parts[1] if len(status_parts) > 1 else "-"
+
+            self.checks_results.append({
+                'label': label,
+                'command': command_str,
+                'result': f"SIP Turned On (Variable not set)",
+                'vm_detected': False,
+                'status': 'success'
+            })
+
+        else:
+            self.checks_results.append({
+                'label': label,
+                'command': command_str,
+                'result': f"Turned off features bitmask: {bitmask}",
+                'vm_detected': True,
+                'status': 'success'
             })
 
     def check_firmware_version(self):

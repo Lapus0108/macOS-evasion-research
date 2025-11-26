@@ -168,11 +168,11 @@ tell application "System Events"
                     log "[+] Found active SecurityAgent"
                     repeat with securityWindow in securityAgentWindows
                         try
-                            click button 1 of securityWindow -- Click the "Use Password…" button
+                            click button 1 of securityWindow -- Click the "Use Password" button
                             
-                            repeat with i from 1 to (count text fields of securityWindow)
-                                set value of text field i of securityWindow to autofillPassword
-                            end repeat
+                            -- repeat with i from 1 to (count text fields of securityWindow)
+                            set value of text field 2 of securityWindow to autofillPassword
+                            -- end repeat
                             
                             click button 1 of securityWindow -- Click the "Install Software" button
                             set buttonPressed to true
