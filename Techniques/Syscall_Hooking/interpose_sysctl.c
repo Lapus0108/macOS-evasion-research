@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/sysctl.h>
+#include <sys/time.h>
 #include <stdint.h>
+#include <time.h>
 
 #ifndef CPU_BRAND_STRING
 #define CPU_BRAND_STRING 107
@@ -10,6 +12,7 @@
 #ifndef KERN_HV_VMM_PRESENT
 #define KERN_HV_VMM_PRESENT 263
 #endif
+
 
 int custom_sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp, void *newp, size_t newlen) {
     // hw.memsize
@@ -54,6 +57,19 @@ int custom_sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp, void *n
             int new_value = 0;
             memcpy(oldp, &new_value, sizeof(int));
             *oldlenp = sizeof(int);
+            return 0;
+        }
+    }
+
+    // kern.boottime
+    if (name[0] == CTL_KERN && name[1] == KERN_BOOTTIME && namelen == 2) {
+        if (oldp && oldlenp && *oldlenp >= sizeof(struct timeval)) {
+            struct timeval spoofed_boottime;
+            time_t current_time = time(NULL);
+            spoofed_boottime.tv_sec = current_time - (6.5 * 60 * 60);  // 6.5 hours ago
+            spoofed_boottime.tv_usec = 0;
+            memcpy(oldp, &spoofed_boottime, sizeof(struct timeval));
+            *oldlenp = sizeof(struct timeval);
             return 0;
         }
     }
