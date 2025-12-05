@@ -1,3 +1,10 @@
+## Countermeasures Evaluation
+
+The following table presents the evaluation of the proposed countermeasures against more than forty system-information retrieval commands that are commonly used, or can be used, by macOS malware to detect VMs or Sandboxes. Each command exposes a specific system artifact that may reveal the presence of a virtual machine unless it is properly intercepted or modified. 
+
+A checkmark (✔️) indicates that the corresponding countermeasure can successfully modify the returned value so that it does not disclose virtualization or sandboxing artifacts, whereas a dash (—) means that the specific approach does not neutralize that indicator.
+
+
 | Indicator name | Command | VM Configuration | Syscall hooking | PATH Hijacking |
 |----------------|---------|------------------|------------------|-----------------|
 | Hardware model | `sysctl -n hw.model` | <div align="center">✔️</div> | <div align="center">✔️</div> | <div align="center">✔️</div> |
